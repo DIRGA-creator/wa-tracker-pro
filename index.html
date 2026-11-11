@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WA TRACKER PRO</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:20px;background:#050b08;
+ color:#00ff88;font-family:Arial,sans-serif
+}
+.card{
+ max-width:430px;margin:25px auto;padding:22px;
+ background:#0c1711;border:1px solid #00ff88;
+ border-radius:15px
+}
+h1{text-align:center}
+input{
+ width:100%;padding:14px;margin:10px 0;
+ background:#101f16;color:white;
+ border:1px solid #00ff88;border-radius:8px;
+ font-size:16px
+}
+button{
+ width:100%;padding:14px;margin:7px 0;
+ border:0;border-radius:8px;
+ background:#00ff88;color:#001b0d;
+ font-weight:bold
+}
+.result{
+ background:#101f16;padding:15px;
+ border-radius:8px;margin-top:15px;
+ line-height:1.8;overflow-wrap:anywhere
+}
+a{color:#00ff88}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>⌖ WA TRACKER PRO</h1>
+<p align="center">GPS LOCATION SHARING</p>
+
+<h3>1. NOMOR WHATSAPP</h3>
+<input id="nomor" placeholder="628xxxxxxxxxx">
+<button onclick="cari()">CEK NOMOR</button>
+<div class="result" id="info">
+Informasi nomor akan muncul di sini.
+</div>
+
+<h3>2. BAGIKAN LOKASI</h3>
+<p>Tekan tombol untuk membuat tautan permintaan lokasi.</p>
+<button onclick="buatLink()">BUAT TAUTAN LOKASI</button>
+<div class="result" id="tautan">
+Tautan belum dibuat.
+</div>
+
+<h3>3. LIHAT LOKASI YANG DIBAGIKAN</h3>
+<input id="lat" placeholder="Latitude">
+<input id="lon" placeholder="Longitude">
+<button onclick="lihatMaps()">BUKA GOOGLE MAPS</button>
+</div>
+
+<script>
+function cari(){
+ let nomor=document.getElementById("nomor").value.replace(/\D/g,"");
+ if(nomor.startsWith("0")) nomor="62"+nomor.slice(1);
+ if(nomor.length<8){
+  alert("Nomor tidak valid");
+  return;
+ }
+ let negara=nomor.startsWith("62")?"Indonesia":nomor.startsWith("60")?"Malaysia":nomor.startsWith("65")?"Singapura":"Negara belum dikenali";
+ document.getElementById("info").innerHTML=
+ "Nomor: "+nomor+"<br>Negara: "+negara+
+ "<br><small>Wilayah asal dan lokasi GPS tidak dapat dipastikan hanya dari nomor.</small>";
+}
+
+function buatLink(){
+ let url=location.origin+location.pathname+"?share=1";
+ let pesan="Halo, jika bersedia, silakan buka tautan ini untuk membagikan lokasi GPS kamu: "+url;
+ document.getElementById("tautan").innerHTML=
+ "Bagikan melalui WhatsApp:<br><a href='https://wa.me/?text="+encodeURIComponent(pesan)+"' target='_blank'>KIRIM PERMINTAAN LOKASI</a>";
+}
+
+function lihatMaps(){
+ let lat=document.getElementById("lat").value.trim();
+ let lon=document.getElementById("lon").value.trim();
+ if(lat===""||lon===""||!Number.isFinite(Number(lat))||
+ !Number.isFinite(Number(lon))||
+ Math.abs(Number(lat))>90||Math.abs(Number(lon))>180){
+  alert("Masukkan koordinat yang valid!");
+  return;
+ }
+ window.open("https://maps.google.com/?q="+lat+","+lon,"_blank");
+}
+</script>
+</body>
+</html>
